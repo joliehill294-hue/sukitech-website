@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smartlead 展览 - 设计草图 (按参考图1:1)</title>
+<style>
+/* ===== Theme Colors ===== */
+:root {
+  --blue: #153558;
+  --teal: #3FA3B1;
+  --silver: #BFC5CC;
+  --blue-dark: #0d2640;
+  --blue-light: #1a4a78;
+  --teal-dark: #2d8a96;
+  --teal-light: #6dc5cf;
+  --silver-light: #d8dde3;
+  --silver-lighter: #e8ebef;
+  --white: #ffffff;
+  --bg: #f5f7fa;
+  --text: #2d3748;
+  --text-secondary: #5a6b7d;
+  --text-muted: #8899aa;
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+  --transition: 0.25s ease;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  background: #e8ecf0; color: var(--text); line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+
+/* ===== Toolbar ===== */
+.toolbar {
+  position: sticky; top: 0; z-index: 999;
+  background: #0d1f33; color: #fff;
+  padding: 10px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 13px; font-weight: 600;
+}
+.toolbar select {
+  padding: 5px 12px; border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.25); background: rgba(255,255,255,0.08);
+  color: #fff; font-size: 12px; cursor: pointer;
+}
+.toolbar select option { color: #000; }
+
+.page { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+/* ===== Section Title ===== */
+.sec-head {
+  font-size: 18px; font-weight: 700; color: var(--blue);
+  margin: 36px 0 16px; padding: 10px 24px 10px 20px;
+  display: inline-flex; align-items: center; gap: 10px;
+  border-left: 3px solid var(--blue);
+  position: relative;
+}
+.sec-head::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 28px; height: 3px;
+  background: var(--blue);
+}
+.sec-head::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 28px; height: 3px;
+  background: var(--blue);
+}
+.sec-num {
+  width: 28px; height: 28px; border-radius: 6px;
+  background: var(--blue); color: #fff;
+  font-size: 13px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ===== 01 Color Palette ===== */
+.palette { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+.swatch { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.swatch-color { height: 70px; }
+.swatch-label { padding: 10px 12px; background: #fff; font-size: 11px; }
+.swatch-label b { display: block; font-size: 12px; }
+.swatch-label code { color: var(--text-muted); font-size: 10px; }
+
+/* ===== 02 Typography ===== */
+.type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 700px) { .type-grid { grid-template-columns: 1fr; } }
+.type-item { background: #fff; padding: 14px 18px; border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); }
+.type-item .tag { font-size: 9px; text-transform: uppercase; color: var(--silver); letter-spacing: 1.5px; margin-bottom: 2px; }
+
+/* ===== HEADER MOCK ===== */
+.header-mock {
+  border-radius: var(--radius-lg);
+  overflow: hidden; box-shadow: var(--shadow-md);
+  position: relative;
+  background: url('assets/banner.png') top center / 100% auto no-repeat;
+  min-height: 0;
+  padding-bottom: 60%; /* banner height */
+}
+.header-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(21,53,88,0.12) 55%,
+    rgba(21,53,88,0.3) 70%,
+    rgba(21,53,88,0.55) 82%,
+    rgba(21,53,88,0.75) 100%);
+}
+.header-topbar {
+  position: relative; z-index: 2;
+  padding: 8px 20px;
+  display: flex; justify-content: flex-end; gap: 16px;
+  font-size: 11px; color: rgba(255,255,255,0.7);
+}
+.header-nav {
+  position: relative; z-index: 2;
+  padding: 12px 20px;
+  display: flex; align-items: center;
+}
+.header-nav .logo { display: flex; align-items: center; gap: 8px; }
+.header-nav .logo-icon {
+  width: 36px; height: 36px; border-radius: 6px;
+  background: var(--teal); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 13px;
+}
+.header-nav .logo-text { color: #fff; font-size: 16px; font-weight: 700; }
+.header-nav .nav-center {
+  display: flex; gap: 28px; margin: 0 auto;
+}
+.header-nav .nav-link { color: rgba(255,255,255,0.8); font-size: 13px; cursor: pointer; white-space: nowrap; font-weight: 500; }
+.header-nav .nav-link.on { color: #fff; font-weight: 700; }
+.header-nav .lang-btn {
+  padding: 5px 16px; border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.35); color: #fff;
+  font-size: 12px; cursor: pointer; background: rgba(255,255,255,0.08);
+}
+.hero-overlay-content {
+  position: absolute; bottom: 18%; left: 0; right: 0; z-index: 2;
+  padding: 0 40px;
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.hero-overlay-text { color: #fff; text-align: center; max-width: 800px; }
+.hero-overlay-text .badge {
+  display: inline-block; padding: 4px 14px; border-radius: 20px;
+  background: rgba(255,255,255,0.12); font-size: 11px;
+  margin-bottom: 14px;
+}
+.hero-overlay-text h2 { font-size: 32px; font-weight: 800; line-height: 1.2; margin-bottom: 8px; }
+.hero-overlay-text h2 span { color: var(--teal-light); }
+.hero-overlay-text .sub { font-size: 14px; opacity: 0.85; margin-bottom: 20px; line-height: 1.6; }
+.hero-overlay-text .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.hero-overlay-text .btns button {
+  padding: 9px 22px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.1); color: #fff;
+  font-size: 12px; cursor: pointer; transition: var(--transition);
+}
+.hero-overlay-text .btns button:hover { background: rgba(255,255,255,0.2); }
+.hero-dots {
+  position: absolute; bottom: 3%; left: 50%; transform: translateX(-50%);
+  z-index: 2; display: flex; gap: 8px;
+}
+.hero-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,0.35); cursor: pointer;
+}
+.hero-dot.on { background: #fff; width: 22px; border-radius: 4px; }
+
+
+/* ===== CONCEPT BUTTONS ===== */
+.concept-row {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+}
+@media (max-width: 600px) { .concept-row { grid-template-columns: repeat(2, 1fr); } }
+.concept-btn {
+  background: #fff; border-radius: var(--radius); padding: 20px 16px;
+  text-align: center; box-shadow: var(--shadow); cursor: pointer;
+  transition: var(--transition); border: 2px solid transparent;
+}
+.concept-btn:hover { border-color: var(--teal); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.concept-btn .icon-circle {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue), var(--blue-light));
+  color: #fff; margin: 0 auto 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.concept-btn h4 { font-size: 13px; font-weight: 700; color: var(--blue); margin-bottom: 2px; }
+.concept-btn p { font-size: 10px; color: var(--text-muted); }
+
+/* ===== SECTION BAND ===== */
+.section-band {
+  background: var(--silver-lighter); border-radius: var(--radius-lg);
+  padding: 10px 20px; margin: 16px 0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.section-band h3 { font-size: 16px; font-weight: 700; color: var(--blue); }
+.section-band a { font-size: 12px; color: var(--teal); font-weight: 600; text-decoration: none; }
+
+/* ===== CASE CARDS ===== */
+.case-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+@media (max-width: 900px) { .case-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .case-grid { grid-template-columns: 1fr; } }
+.case-card {
+  background: #fff; border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow); transition: var(--transition);
+}
+.case-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.case-card .img {
+  height: 0; padding-bottom: 70%;
+  position: relative; overflow: hidden;
+}
+.case-card .img-inner {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.4); font-size: 12px;
+}
+.case-card .img-inner.c1 { background: linear-gradient(145deg, #1a3a5c, #2a6088); }
+.case-card .img-inner.c2 { background: linear-gradient(145deg, #1e4260, #356890); }
+.case-card .img-inner.c3 { background: linear-gradient(145deg, #163550, #265a80); }
+.case-card .img-inner.c4 { background: linear-gradient(145deg, #1c3e58, #2e6488); }
+.case-card .info { padding: 12px 14px; }
+.case-card .info .client { font-size: 13px; font-weight: 700; color: var(--text); }
+.case-card .info .expo { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+/* ===== VENUE CARDS ===== */
+.venue-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+@media (max-width: 900px) { .venue-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .venue-grid { grid-template-columns: 1fr; } }
+.venue-card {
+  background: #fff; border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow); transition: var(--transition); text-align: center;
+}
+.venue-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.venue-card .img {
+  height: 0; padding-bottom: 55%; position: relative;
+}
+.venue-card .img-inner {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.4); font-size: 13px;
+}
+.venue-card .img-inner.v1 { background: linear-gradient(145deg, #153558, #1a4a78); }
+.venue-card .img-inner.v2 { background: linear-gradient(145deg, #1a4a78, #287090); }
+.venue-card .img-inner.v3 { background: linear-gradient(145deg, #3FA3B1, #2d8a96); }
+.venue-card .img-inner.v4 { background: linear-gradient(145deg, #2d6080, #153558); }
+.venue-card .info { padding: 14px 12px; }
+.venue-card .info .name { font-size: 13px; font-weight: 700; color: var(--blue); }
+.venue-card .info .city { font-size: 11px; color: var(--teal); font-weight: 600; margin-top: 3px; }
+
+/* ===== MATERIAL GRID ===== */
+.mat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+@media (max-width: 600px) { .mat-grid { grid-template-columns: repeat(2, 1fr); } }
+.mat-card {
+  background: #fff; border-radius: var(--radius); padding: 24px 16px;
+  text-align: center; box-shadow: var(--shadow); cursor: pointer;
+  transition: var(--transition); border: 2px solid transparent;
+}
+.mat-card:hover { border-color: var(--teal); transform: translateY(-2px); }
+.mat-card .icon-circle {
+  width: 50px; height: 50px; border-radius: 50%;
+  background: var(--teal); color: #fff; margin: 0 auto 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.mat-card h4 { font-size: 13px; font-weight: 700; color: var(--blue); }
+
+/* ===== PLAN TIERS ===== */
+.plan-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+@media (max-width: 600px) { .plan-grid { grid-template-columns: repeat(2, 1fr); } }
+.plan-card {
+  background: #fff; border-radius: var(--radius); padding: 22px 16px;
+  text-align: center; box-shadow: var(--shadow); transition: var(--transition);
+  border-top: 4px solid var(--silver);
+}
+.plan-card:nth-child(1) { border-top-color: var(--silver); }
+.plan-card:nth-child(2) { border-top-color: var(--teal); }
+.plan-card:nth-child(3) { border-top-color: var(--blue); }
+.plan-card:nth-child(4) { border-top-color: var(--teal); background: linear-gradient(180deg, #f0fafb 0%, #fff 40%); }
+.plan-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.plan-card h4 { font-size: 15px; font-weight: 700; color: var(--blue); margin-bottom: 4px; }
+.plan-card p { font-size: 11px; color: var(--text-muted); }
+.plan-card .price { font-size: 22px; font-weight: 800; color: var(--teal); margin: 8px 0 2px; }
+.plan-card .price small { font-size: 11px; font-weight: 400; color: var(--text-muted); }
+
+/* ===== CLIENT LOGOS ===== */
+.client-strip {
+  background: #fff; border-radius: var(--radius); padding: 12px 0;
+  margin-bottom: 6px; overflow: hidden;
+}
+.client-track {
+  display: flex; gap: 30px; width: max-content;
+  animation: marquee 25s linear infinite;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.client-logo {
+  width: 90px; height: 36px; border-radius: 6px;
+  background: var(--silver-lighter); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 600; color: var(--text-muted);
+}
+
+/* ===== NEWS GRID ===== */
+.news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+@media (max-width: 700px) { .news-grid { grid-template-columns: 1fr; } }
+.news-card {
+  background: #fff; border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow); transition: var(--transition);
+}
+.news-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.news-card .img {
+  height: 130px; background: linear-gradient(145deg, var(--silver), var(--silver-light));
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); font-size: 11px;
+}
+.news-card .body { padding: 14px 16px; }
+.news-card .body .date { font-size: 10px; color: var(--teal); font-weight: 600; }
+.news-card .body h4 { font-size: 13px; font-weight: 700; color: var(--text); margin: 4px 0; line-height: 1.4; }
+.news-card .body p { font-size: 11px; color: var(--text-muted); }
+
+/* ===== CONTACT ===== */
+.contact-box {
+  background: #fff; border-radius: var(--radius-lg); padding: 30px;
+  box-shadow: var(--shadow); display: grid;
+  grid-template-columns: 1fr 1fr; gap: 24px;
+}
+@media (max-width: 700px) { .contact-box { grid-template-columns: 1fr; } }
+.contact-box h3 { font-size: 18px; font-weight: 700; color: var(--blue); margin-bottom: 16px; }
+.contact-item {
+  display: flex; gap: 10px; align-items: flex-start;
+  margin-bottom: 12px; font-size: 13px; color: var(--text-secondary);
+}
+.contact-item .ci {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(63,163,177,0.12); color: var(--teal);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+}
+.qr-box {
+  background: #f7fafb; border-radius: var(--radius);
+  padding: 20px; text-align: center; border: 1px dashed var(--silver);
+}
+.qr-placeholder {
+  width: 80px; height: 80px; background: var(--silver-lighter);
+  margin: 0 auto 10px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: var(--text-muted);
+}
+
+/* ===== FOOTER ===== */
+.footer-mock {
+  background: var(--blue); border-radius: var(--radius-lg);
+  padding: 30px 28px; color: #fff; font-size: 12px;
+}
+.footer-mock .cols {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px; margin-bottom: 20px;
+}
+.footer-mock h4 { font-size: 13px; color: var(--teal-light); margin-bottom: 8px; }
+.footer-mock p { color: rgba(255,255,255,0.65); line-height: 1.8; }
+.footer-mock .copy {
+  padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.12);
+  text-align: center; color: rgba(255,255,255,0.4); font-size: 11px;
+}
+
+/* ===== WIREFRAME ===== */
+.wf {
+  background: #fff; border-radius: var(--radius-lg);
+  overflow: hidden; box-shadow: var(--shadow-md);
+}
+.wf-r {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 32px; font-size: 10px; font-weight: 600;
+  letter-spacing: 0.5px; border-bottom: 1px dashed rgba(255,255,255,0.15);
+  text-transform: uppercase; padding: 0 12px;
+}
+.wf-nav { background: var(--blue); color: rgba(255,255,255,0.65); min-height: 44px; }
+.wf-hero { background: #1a4570; color: rgba(255,255,255,0.6); min-height: 130px; }
+.wf-concepts { background: #eef1f5; color: var(--text-muted); min-height: 50px; }
+.wf-section { background: #e2e6ec; color: var(--text-secondary); min-height: 40px; font-size: 11px; }
+.wf-cards { background: #f5f7fa; color: var(--text-muted); min-height: 90px; }
+.wf-teal { background: var(--teal); color: rgba(255,255,255,0.7); min-height: 50px; }
+.wf-footer { background: var(--blue); color: rgba(255,255,255,0.55); min-height: 50px; }
+
+/* ===== MOBILE MOCK ===== */
+.mbl-wrap {
+  display: grid; grid-template-columns: 1fr 340px; gap: 20px; align-items: start;
+}
+@media (max-width: 850px) { .mbl-wrap { grid-template-columns: 1fr; } }
+.mbl-phone {
+  width: 340px; margin: 0 auto;
+  border: 3px solid #222; border-radius: 30px;
+  overflow: hidden; box-shadow: var(--shadow-lg);
+  font-size: 10px;
+}
+.mbl-top { background: var(--blue); padding: 8px 14px; color: #fff; display: flex; justify-content: space-between; font-weight: 600; }
+.mbl-body { background: #f5f7fa; padding: 10px; }
+.mbl-hero {
+  background: linear-gradient(150deg, var(--blue), #1a4a78);
+  color: #fff; padding: 24px 12px; text-align: center;
+  border-radius: 8px; margin-bottom: 8px;
+}
+.mbl-hero h4 { font-size: 13px; font-weight: 800; }
+.mbl-hero p { font-size: 9px; opacity: 0.8; margin-top: 2px; }
+.mbl-g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 8px 0; }
+.mbl-item {
+  background: #fff; border-radius: 6px; padding: 8px;
+  text-align: center; box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.mbl-item .thumb {
+  height: 36px; border-radius: 4px; margin-bottom: 4px;
+  background: linear-gradient(135deg, var(--silver), var(--silver-light));
+}
+.mbl-item .label { font-size: 9px; font-weight: 600; color: var(--text); }
+.mbl-item .sub { font-size: 8px; color: var(--text-muted); }
+.mbl-bnav {
+  background: var(--blue); padding: 8px 14px;
+  display: flex; justify-content: space-between;
+  color: rgba(255,255,255,0.55); font-size: 8px;
+}
+.mbl-bnav .on { color: var(--teal-light); font-weight: 600; }
+
+/* ===== RESPONSIVE PREVIEW ===== */
+.bp-row { display: flex; gap: 12px; margin-bottom: 8px; }
+.bp-box {
+  flex: 1; padding: 8px; border-radius: 6px;
+  text-align: center; font-size: 10px; font-weight: 600;
+  background: var(--silver-lighter); color: var(--text-secondary);
+}
+.bp-box.on { background: var(--blue); color: #fff; }
+
+/* ===== Teal section mock ===== */
+.teal-band {
+  background: var(--teal); border-radius: var(--radius-lg);
+  padding: 24px 28px; color: #fff; margin: 16px 0;
+}
+.teal-band h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.teal-band p { font-size: 12px; opacity: 0.85; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <span>Smartlead 展览 — 设计草图 v2 (参考图 1:1 复刻)</span>
+  <select onchange="setLang(this.value)">
+    <option value="zh">中文</option>
+    <option value="es">Español</option>
+  </select>
+</div>
+
+<div class="page">
+
+<!-- ===== 01 COLORS ===== -->
+<div class="sec-head"><span class="sec-num">01</span> 配色方案 / Colors</div>
+<div class="palette">
+  <div class="swatch"><div class="swatch-color" style="background:#153558;"></div><div class="swatch-label"><b>Deep Blue 主色</b><code>#153558</code>导航/Hero/Footer</div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#3FA3B1;"></div><div class="swatch-label"><b>Teal 强调色</b><code>#3FA3B1</code>图标/链接/高亮</div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#BFC5CC;"></div><div class="swatch-label"><b>Silver 灰</b><code>#BFC5CC</code>边框/分割线/辅助</div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#f5f7fa;border:1px solid #dde0e4;"></div><div class="swatch-label"><b>Page BG</b><code>#f5f7fa</code>页面底色</div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#2d3748;"></div><div class="swatch-label"><b>Text</b><code>#2d3748</code>正文文字</div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#8899aa;"></div><div class="swatch-label"><b>Text Muted</b><code>#8899aa</code>辅助文字</div></div>
+</div>
+
+<!-- ===== 02 TYPOGRAPHY ===== -->
+<div class="sec-head"><span class="sec-num">02</span> 字体 / Typography</div>
+<div class="type-grid">
+  <div class="type-item"><div class="tag">Hero 主标题</div><div style="font-size:30px;font-weight:800;color:var(--blue);">智领展览</div><div style="font-size:15px;color:var(--teal);">Exposición de Smartlead</div></div>
+  <div class="type-item"><div class="tag">Section 标题</div><div style="font-size:18px;font-weight:700;color:var(--blue);">案例展示 · 展厅展馆</div></div>
+  <div class="type-item"><div class="tag">卡片标题</div><div style="font-size:13px;font-weight:700;color:var(--text);">BYD 墨西哥国际汽车博览会</div></div>
+  <div class="type-item"><div class="tag">正文</div><div style="font-size:13px;color:var(--text-secondary);">专注为中国企业提供墨西哥及拉美展会本地化解决方案</div></div>
+</div>
+
+<!-- ===== 03 TOP NAV + HERO (combined) ===== -->
+<div class="sec-head"><span class="sec-num">03</span> 顶部导航 + Hero Banner / Header & Hero</div>
+<div class="header-mock">
+  <div class="header-overlay"></div>
+  <div class="header-topbar" style="height:6px"></div>
+  <div class="header-nav">
+    <div class="logo">
+      <div class="logo-icon">SL</div>
+      <span class="logo-text">Smartlead 展览</span>
+    </div>
+    <div class="nav-center">
+      <span class="nav-link on" data-i18n="n_home">首页</span>
+      <span class="nav-link" data-i18n="n_about">关于我们</span>
+      <span class="nav-link" data-i18n="n_cases">案例展示</span>
+      <span class="nav-link" data-i18n="n_mats">展会物料</span>
+      <span class="nav-link" data-i18n="n_news">行业资讯</span>
+      <span class="nav-link" data-i18n="n_contact">联系我们</span>
+    </div>
+    <button class="lang-btn" data-i18n="lang">ES / 中文</button>
+  </div>
+  <div class="hero-overlay-content">
+    <div class="hero-overlay-text">
+      <h2 data-i18n="h_title">智领展览 <span>Exposición de Smartlead</span></h2>
+      <div class="sub" data-i18n="h_sub">墨西哥展览全产业一站式服务提供商<br>专注为中国企业提供墨西哥及拉美展会本地化解决方案</div>
+      <div class="btns">
+        <button data-i18n="h_btn1">关于我们</button>
+        <button data-i18n="h_btn2">行业实力</button>
+        <button data-i18n="h_btn3">流程可控</button>
+        <button data-i18n="h_btn4">一站式服务</button>
+      </div>
+    </div>
+  </div>
+  <div class="hero-dots">
+    <div class="hero-dot on"></div>
+    <div class="hero-dot"></div>
+    <div class="hero-dot"></div>
+  </div>
+</div>
+
+<!-- ===== 04 HERO BANNER (standalone, removed - merged into 03) ===== -->
+
+<!-- ===== 05 CONCEPTS ===== -->
+<div class="sec-head"><span class="sec-num">04</span> 关于我们 / About Us</div>
+<div class="concept-row">
+  <div class="concept-btn">
+    <div class="icon-circle">1</div>
+    <h4 data-i18n="c1_title">公司理念</h4>
+    <p data-i18n="c1_desc">本地化执行 · 国际化标准</p>
+  </div>
+  <div class="concept-btn">
+    <div class="icon-circle">2</div>
+    <h4 data-i18n="c2_title">行业实力</h4>
+    <p data-i18n="c2_desc">深耕墨西哥展览市场</p>
+  </div>
+  <div class="concept-btn">
+    <div class="icon-circle">3</div>
+    <h4 data-i18n="c3_title">流程可控</h4>
+    <p data-i18n="c3_desc">全链条透明化管理</p>
+  </div>
+  <div class="concept-btn">
+    <div class="icon-circle">4</div>
+    <h4 data-i18n="c4_title">一站式服务</h4>
+    <p data-i18n="c4_desc">设计·搭建·物料·策划</p>
+  </div>
+</div>
+
+<!-- ===== 06 CASES ===== -->
+<div class="sec-head"><span class="sec-num">05</span> 案例展示 / Cases</div>
+<div class="case-grid">
+  <div class="case-card">
+    <div class="img"><div class="img-inner c1">展台照片占位</div></div>
+    <div class="info"><div class="client">比亚迪 BYD</div><div class="expo" data-i18n="case1">墨西哥国际汽车博览会 2025</div></div>
+  </div>
+  <div class="case-card">
+    <div class="img"><div class="img-inner c2">展台照片占位</div></div>
+    <div class="info"><div class="client">华为 Huawei</div><div class="expo" data-i18n="case2">墨西哥通信展 2025</div></div>
+  </div>
+  <div class="case-card">
+    <div class="img"><div class="img-inner c3">展台照片占位</div></div>
+    <div class="info"><div class="client">美的 Midea</div><div class="expo" data-i18n="case3">墨西哥家电博览会 2025</div></div>
+  </div>
+  <div class="case-card">
+    <div class="img"><div class="img-inner c4">展台照片占位</div></div>
+    <div class="info"><div class="client">大疆 DJI</div><div class="expo" data-i18n="case4">拉美科技创新展 2025</div></div>
+  </div>
+</div>
+
+<!-- ===== 07 VENUES ===== -->
+<div class="sec-head"><span class="sec-num">06</span> 展厅展馆 / Venues</div>
+<div class="venue-grid">
+  <div class="venue-card">
+    <div class="img"><div class="img-inner v1">展馆照片占位</div></div>
+    <div class="info"><div class="name">Centro Citibanamex</div><div class="city">Ciudad de México</div></div>
+  </div>
+  <div class="venue-card">
+    <div class="img"><div class="img-inner v2">展馆照片占位</div></div>
+    <div class="info"><div class="name">Expo Santa Fe México</div><div class="city">Ciudad de México</div></div>
+  </div>
+  <div class="venue-card">
+    <div class="img"><div class="img-inner v3">展馆照片占位</div></div>
+    <div class="info"><div class="name">Expo Guadalajara</div><div class="city">Guadalajara</div></div>
+  </div>
+  <div class="venue-card">
+    <div class="img"><div class="img-inner v4">展馆照片占位</div></div>
+    <div class="info"><div class="name">Cintermex</div><div class="city">Monterrey</div></div>
+  </div>
+</div>
+
+<!-- ===== 08 MATERIALS ===== -->
+<div class="sec-head"><span class="sec-num">07</span> 展会物料 / Materials</div>
+<div class="mat-grid">
+  <div class="mat-card">
+    <div class="icon-circle">01</div>
+    <h4 data-i18n="mat1">展位搭建物料类</h4>
+  </div>
+  <div class="mat-card">
+    <div class="icon-circle">02</div>
+    <h4 data-i18n="mat2">品牌宣传印刷类</h4>
+  </div>
+  <div class="mat-card">
+    <div class="icon-circle">03</div>
+    <h4 data-i18n="mat3">引流互动物料类</h4>
+  </div>
+  <div class="mat-card">
+    <div class="icon-circle">04</div>
+    <h4 data-i18n="mat4">礼品赠品类</h4>
+  </div>
+</div>
+
+<!-- ===== 09 PLANS ===== -->
+<div class="sec-head"><span class="sec-num">08</span> 活动策划方案 / Plans</div>
+<div class="plan-grid">
+  <div class="plan-card">
+    <h4 data-i18n="plan1">净展</h4>
+    <p data-i18n="plan1d">基础空间租赁</p>
+    <div class="price">—</div>
+  </div>
+  <div class="plan-card">
+    <h4 data-i18n="plan2">普展</h4>
+    <p data-i18n="plan2d">标准搭建方案</p>
+    <div class="price">—</div>
+  </div>
+  <div class="plan-card">
+    <h4 data-i18n="plan3">特展</h4>
+    <p data-i18n="plan3d">定制化品牌设计</p>
+    <div class="price">—</div>
+  </div>
+  <div class="plan-card">
+    <h4 data-i18n="plan4">高端展</h4>
+    <p data-i18n="plan4d">全方位策划执行</p>
+    <div class="price">—</div>
+  </div>
+</div>
+
+<!-- ===== 10 CLIENTS ===== -->
+<div class="sec-head"><span class="sec-num">09</span> 客户 Logo 墙 / Clients</div>
+<div class="client-strip">
+  <div class="client-track">
+    <div class="client-logo">BYD</div><div class="client-logo">Huawei</div><div class="client-logo">Midea</div>
+    <div class="client-logo">DJI</div><div class="client-logo">Haier</div><div class="client-logo">Lenovo</div>
+    <div class="client-logo">Xiaomi</div><div class="client-logo">Alibaba</div><div class="client-logo">Chery</div>
+    <div class="client-logo">BYD</div><div class="client-logo">Huawei</div><div class="client-logo">Midea</div>
+    <div class="client-logo">DJI</div><div class="client-logo">Haier</div><div class="client-logo">Lenovo</div>
+    <div class="client-logo">Xiaomi</div><div class="client-logo">Alibaba</div><div class="client-logo">Chery</div>
+  </div>
+</div>
+<div class="client-strip">
+  <div class="client-track" style="animation-direction:reverse;animation-duration:28s;">
+    <div class="client-logo">SAIC</div><div class="client-logo">NIO</div><div class="client-logo">TCL</div>
+    <div class="client-logo">Hisense</div><div class="client-logo">CATL</div><div class="client-logo">Zeekr</div>
+    <div class="client-logo">GAC</div><div class="client-logo">Geely</div><div class="client-logo">Oppo</div>
+    <div class="client-logo">SAIC</div><div class="client-logo">NIO</div><div class="client-logo">TCL</div>
+    <div class="client-logo">Hisense</div><div class="client-logo">CATL</div><div class="client-logo">Zeekr</div>
+    <div class="client-logo">GAC</div><div class="client-logo">Geely</div><div class="client-logo">Oppo</div>
+  </div>
+</div>
+<div class="client-strip">
+  <div class="client-track" style="animation-duration:32s;">
+    <div class="client-logo">Tencent</div><div class="client-logo">Baidu</div><div class="client-logo">Vivo</div>
+    <div class="client-logo">Li Auto</div><div class="client-logo">XPeng</div><div class="client-logo">SGMW</div>
+    <div class="client-logo">Tencent</div><div class="client-logo">Baidu</div><div class="client-logo">Vivo</div>
+    <div class="client-logo">Li Auto</div><div class="client-logo">XPeng</div><div class="client-logo">SGMW</div>
+    <div class="client-logo">Tencent</div><div class="client-logo">Baidu</div><div class="client-logo">Vivo</div>
+  </div>
+</div>
+
+<!-- ===== 11 NEWS ===== -->
+<div class="sec-head"><span class="sec-num">10</span> 行业资讯 / News</div>
+<div class="news-grid">
+  <div class="news-card">
+    <div class="img">资讯图片占位</div>
+    <div class="body">
+      <div class="date">2025-06-15</div>
+      <h4 data-i18n="n1">2025墨西哥中国企业出海展览趋势报告</h4>
+      <p data-i18n="n1e">深度解析中国品牌在墨西哥展览市场的增长...</p>
+    </div>
+  </div>
+  <div class="news-card">
+    <div class="img">资讯图片占位</div>
+    <div class="body">
+      <div class="date">2025-05-28</div>
+      <h4 data-i18n="n2">拉美展览市场复苏：展台搭建需求激增</h4>
+      <p data-i18n="n2e">后疫情时代拉美展览行业的强劲反弹与机遇...</p>
+    </div>
+  </div>
+  <div class="news-card">
+    <div class="img">资讯图片占位</div>
+    <div class="body">
+      <div class="date">2025-05-10</div>
+      <h4 data-i18n="n3">墨西哥城 Citibanamex 展馆升级</h4>
+      <p data-i18n="n3e">墨西哥最大展馆完成新一轮设施升级...</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 12 CONTACT ===== -->
+<div class="sec-head"><span class="sec-num">11</span> 联系我们 / Contact</div>
+<div class="contact-box">
+  <div>
+    <h3 data-i18n="contact">联系我们</h3>
+    <div class="contact-item"><div class="ci">📍</div><span>Av. Paseo de la Reforma 250, CDMX</span></div>
+    <div class="contact-item"><div class="ci">📞</div><span>+52 55 1234 5678</span></div>
+    <div class="contact-item"><div class="ci">✉️</div><span>info@smartlead.mx</span></div>
+    <div class="contact-item"><div class="ci">💬</div><span>Smartlead_MX</span></div>
+  </div>
+  <div class="qr-box">
+    <div class="qr-placeholder">微信二维码</div>
+    <div style="font-weight:700;color:var(--blue);font-size:13px;" data-i18n="wx">添加微信咨询</div>
+    <div style="font-size:10px;color:var(--text-muted);">Smartlead_MX</div>
+  </div>
+</div>
+
+<!-- ===== 13 FOOTER ===== -->
+<div class="sec-head"><span class="sec-num">12</span> 页脚 / Footer</div>
+<div class="footer-mock">
+  <div class="cols">
+    <div>
+      <h4>Smartlead 展览</h4>
+      <p data-i18n="f_desc">Exposición de Smartlead<br>墨西哥展览全产业一站式服务</p>
+    </div>
+    <div>
+      <h4 data-i18n="f_nav">快速导航</h4>
+      <p data-i18n="f_links">首页 · 关于我们 · 案例展示 · 展会物料 · 行业资讯 · 联系我们</p>
+    </div>
+    <div>
+      <h4 data-i18n="f_contact">联系方式</h4>
+      <p>Av. Paseo de la Reforma 250, CDMX<br>+52 55 1234 5678<br>info@smartlead.mx</p>
+    </div>
+  </div>
+  <div class="copy">© 2025 Exposición de Smartlead. Todos los derechos reservados.</div>
+</div>
+
+<!-- ===== 14 WIREFRAME ===== -->
+<div class="sec-head"><span class="sec-num">13</span> 整页线框图 / Wireframe</div>
+<div class="wf">
+  <div class="wf-r wf-nav">NAV: TopBar(邮箱+电话) | Logo+Smartlead | 首页 关于 案例 物料 资讯 联系 | ES/中文</div>
+  <div class="wf-r wf-hero">HERO: 3张轮播 | 主标题 "智领展览" + 副标题 | 4个按钮 | 右侧大图</div>
+  <div class="wf-r wf-concepts">4 理念按钮: 公司理念 | 行业实力 | 流程可控 | 一站式服务</div>
+  <div class="wf-r wf-section">一、案例展示 Section Band + 4 卡片 (70% 图 + 30% 文) + "查看更多 →"</div>
+  <div class="wf-r wf-cards">[BYD] [Huawei] [Midea] [DJI]</div>
+  <div class="wf-r wf-section">二、展厅展馆 Section Band + 4 展馆卡片</div>
+  <div class="wf-r wf-cards">[Citibanamex] [Santa Fe] [Guadalajara] [Cintermex]</div>
+  <div class="wf-r wf-section">三、展会物料精选 Section Band + 4 物料分类卡片</div>
+  <div class="wf-r wf-cards">[搭建物料] [印刷品] [互动引流] [礼品]</div>
+  <div class="wf-r wf-section">四、活动策划方案 Section Band + 4 档位卡片 (净展/普展/特展/高端展)</div>
+  <div class="wf-r wf-section">五、我们的客户 — 3 行自动滚动 Logo 墙</div>
+  <div class="wf-r wf-section">六、行业资讯 Section Band + 3 列新闻卡片</div>
+  <div class="wf-r wf-section">七、联系我们 — 联系信息 + 微信二维码</div>
+  <div class="wf-r wf-footer">FOOTER: 3列(品牌/导航/联系) + Copyright © 2025 Smartlead</div>
+</div>
+
+<!-- ===== 15 MOBILE ===== -->
+<div class="sec-head"><span class="sec-num">14</span> 移动端 / Mobile (340px)</div>
+<div class="mbl-wrap">
+  <div>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">右侧为手机端模拟。参考图移动端的核心特征：</p>
+    <ul style="font-size:11px;color:var(--text-secondary);padding-left:16px;line-height:2.2;">
+      <li>导航 → 汉堡菜单 ☰</li>
+      <li>Hero 图片缩小，文字居中</li>
+      <li>4 理念按钮 → 2×2 网格</li>
+      <li>案例卡片 → 单列全宽</li>
+      <li>展馆 → 单列全宽</li>
+      <li>物料 / 方案 → 2×2</li>
+      <li>资讯 → 单列</li>
+      <li>联系 → 单列堆叠</li>
+      <li>底部固定导航栏（4项）</li>
+    </ul>
+  </div>
+  <div class="mbl-phone">
+    <div class="mbl-top"><span>☰</span><span style="font-weight:700;">Smartlead</span><span>ES</span></div>
+    <div class="mbl-body">
+      <div class="mbl-hero"><h4>智领展览</h4><p>墨西哥展览全产业一站式服务</p></div>
+      <div class="mbl-g2">
+        <div class="mbl-item"><strong style="font-size:9px;">公司理念</strong></div>
+        <div class="mbl-item"><strong style="font-size:9px;">行业实力</strong></div>
+        <div class="mbl-item"><strong style="font-size:9px;">流程可控</strong></div>
+        <div class="mbl-item"><strong style="font-size:9px;">一站式服务</strong></div>
+      </div>
+      <div style="font-weight:700;font-size:9px;color:var(--blue);margin:8px 0 4px;">案例展示</div>
+      <div class="mbl-g2">
+        <div class="mbl-item"><div class="thumb"></div><div class="label">BYD</div><div class="sub">汽车博览会</div></div>
+        <div class="mbl-item"><div class="thumb"></div><div class="label">Huawei</div><div class="sub">通信展</div></div>
+        <div class="mbl-item"><div class="thumb"></div><div class="label">Midea</div><div class="sub">家电博览会</div></div>
+        <div class="mbl-item"><div class="thumb"></div><div class="label">DJI</div><div class="sub">科技创新展</div></div>
+      </div>
+      <div style="font-weight:700;font-size:9px;color:var(--blue);margin:8px 0 4px;">展馆</div>
+      <div class="mbl-item" style="text-align:left;margin-bottom:3px;"><strong>Centro Citibanamex</strong> <span style="color:var(--text-muted);font-size:8px;">CDMX</span></div>
+      <div class="mbl-item" style="text-align:left;margin-bottom:3px;"><strong>Expo Santa Fe</strong> <span style="color:var(--text-muted);font-size:8px;">CDMX</span></div>
+      <div class="mbl-item" style="text-align:left;margin-bottom:3px;"><strong>Expo Guadalajara</strong></div>
+      <div class="mbl-item" style="text-align:left;margin-bottom:3px;"><strong>Cintermex</strong> <span style="color:var(--text-muted);font-size:8px;">Monterrey</span></div>
+      <div style="text-align:center;color:var(--teal);font-size:9px;font-weight:600;margin:8px 0;">info@smartlead.mx</div>
+    </div>
+    <div class="mbl-bnav">
+      <span class="on">首页</span><span>案例</span><span>物料</span><span>联系</span>
+    </div>
+  </div>
+</div>
+
+</div><!-- /page -->
+
+<script>
+const lang = {
+  zh: {
+    n_home:"首页",n_about:"关于我们",n_cases:"案例展示",n_mats:"展会物料",n_news:"行业资讯",n_contact:"联系我们",lang:"ES / 中文",
+    h_badge:"墨西哥本地展览服务商",h_title:'智领展览 <span>Exposición de Smartlead</span>',h_sub:"墨西哥展览全产业一站式服务提供商<br>专注为中国企业提供墨西哥及拉美展会本地化解决方案",
+    h_btn1:"关于我们",h_btn2:"行业实力",h_btn3:"流程可控",h_btn4:"一站式服务",
+    c1_title:"公司理念",c1_desc:"本地化执行 · 国际化标准",
+    c2_title:"行业实力",c2_desc:"深耕墨西哥展览市场",
+    c3_title:"流程可控",c3_desc:"全链条透明化管理",
+    c4_title:"一站式服务",c4_desc:"设计·搭建·物料·策划",
+    sec_cases:"墨西哥站台搭建案例",sec_venues:"墨西哥核心展馆",sec_mats:"展会物料精选",sec_plans:"活动策划方案咨询",sec_news:"行业资讯",
+    more:"查看更多 →",
+    case1:"墨西哥国际汽车博览会 2025",case2:"墨西哥通信展 2025",case3:"墨西哥家电博览会 2025",case4:"拉美科技创新展 2025",
+    mat1:"展位搭建物料类",mat2:"品牌宣传印刷类",mat3:"引流互动物料类",mat4:"礼品赠品类",
+    plan1:"净展",plan1d:"基础空间租赁",plan2:"普展",plan2d:"标准搭建方案",plan3:"特展",plan3d:"定制化品牌设计",plan4:"高端展",plan4d:"全方位策划执行",
+    n1:"2025墨西哥中国企业出海展览趋势报告",n1e:"深度解析中国品牌在墨西哥展览市场的增长...",
+    n2:"拉美展览市场复苏：展台搭建需求激增",n2e:"后疫情时代拉美展览行业的强劲反弹与机遇...",
+    n3:"墨西哥城 Citibanamex 展馆升级",n3e:"墨西哥最大展馆完成新一轮设施升级...",
+    contact:"联系我们",wx:"添加微信咨询",
+    f_desc:"Exposición de Smartlead<br>墨西哥展览全产业一站式服务",f_nav:"快速导航",f_links:"首页 · 关于我们 · 案例展示 · 展会物料 · 行业资讯 · 联系我们",f_contact:"联系方式",
+  },
+  es: {
+    n_home:"Inicio",n_about:"Nosotros",n_cases:"Casos",n_mats:"Materiales",n_news:"Noticias",n_contact:"Contacto",lang:"ES / 中文",
+    h_badge:"Servicios de Exhibición en México",h_title:'智领展览 <span>Exposición de Smartlead</span>',h_sub:"Proveedor integral de servicios de exhibición en México<br>Soluciones localizadas para empresas chinas en México y LATAM",
+    h_btn1:"Nosotros",h_btn2:"Fortaleza",h_btn3:"Proceso",h_btn4:"Servicio Integral",
+    c1_title:"Filosofía",c1_desc:"Ejecución local · Estándar global",
+    c2_title:"Fortaleza",c2_desc:"Experiencia en el mercado mexicano",
+    c3_title:"Proceso",c3_desc:"Gestión transparente integral",
+    c4_title:"Servicio Integral",c4_desc:"Diseño·Montaje·Material·Planificación",
+    sec_cases:"Casos de Stands en México",sec_venues:"Recintos Feriales",sec_mats:"Materiales de Exhibición",sec_plans:"Planificación de Eventos",sec_news:"Noticias",
+    more:"Ver más →",
+    case1:"Expo Auto México 2025",case2:"México Telecom 2025",case3:"Expo Electrodomésticos 2025",case4:"LATAM Tech Innovation 2025",
+    mat1:"Materiales de Stand",mat2:"Impresión de Marca",mat3:"Material Interactivo",mat4:"Regalos Promocionales",
+    plan1:"Básico",plan1d:"Espacio esencial",plan2:"Estándar",plan2d:"Montaje estándar",plan3:"Especial",plan3d:"Diseño personalizado",plan4:"Premium",plan4d:"Planificación completa",
+    n1:"Informe de Tendencias de Exhibición 2025",n1e:"Análisis del crecimiento de marcas chinas en México...",
+    n2:"Recuperación del mercado LATAM",n2e:"Fuerte repunte de la industria de exhibiciones...",
+    n3:"Centro Citibanamex: renovación",n3e:"El mayor recinto ferial de México completa mejoras...",
+    contact:"Contáctenos",wx:"Agregar WeChat",
+    f_desc:"Exposición de Smartlead<br>Servicio integral de exhibición",f_nav:"Navegación",f_links:"Inicio · Nosotros · Casos · Materiales · Noticias · Contacto",f_contact:"Contacto",
+  }
+};
+function setLang(l) {
+  const d = lang[l];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.dataset.i18n;
+    if (d[k] !== undefined) el.innerHTML = d[k];
+  });
+}
+</script>
+</body>
+</html>
